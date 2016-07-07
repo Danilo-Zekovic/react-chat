@@ -6,6 +6,11 @@ export default React.createClass({
       <div>
         <h1>Chat View</h1>
 
+        <ul id="messages"></ul>
+        <form action="">
+          <input id="m" autoComplete="off" /><button>Send</button>
+        </form>
+
       </div>
     )
   }

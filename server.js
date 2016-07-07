@@ -1,6 +1,7 @@
 var express = require('express')
 var path = require('path')
 var compression = require('compression')
+var io = require(socket.io)(http)
 
 var app = express()
 
@@ -13,6 +14,13 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'))
 })
+
+//io.listen(http)  // tried not doing anything
+io.on('connection', function(socket){
+  socket.on('chat message', function(msg){
+    io.emit('chat message', msg)
+  });
+});
 
 var PORT = process.env.PORT || 8080
 app.listen(PORT, function() {
