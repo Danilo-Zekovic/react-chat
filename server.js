@@ -1,9 +1,13 @@
 var express = require('express')
 var path = require('path')
 var compression = require('compression')
-var io = require(socket.io)(http)
+var http = require('http')
+var socketIo = require('socket.io')
 
 var app = express()
+
+var server = http.createServer( app )
+var io = socketIo.listen( server )
 
 app.use(compression())
 
@@ -15,14 +19,17 @@ app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'))
 })
 
-//io.listen(http)  // tried not doing anything
-io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    io.emit('chat message', msg)
-  });
-});
+
 
 var PORT = process.env.PORT || 8080
 app.listen(PORT, function() {
   console.log('Production Express server running at localhost:' + PORT)
 })
+
+//io.listen(http)  // tried not doing anything
+io.on('connection',  function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+    });
+});
